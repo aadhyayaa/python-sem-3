@@ -1,51 +1,30 @@
-from abc import ABC, abstractmethod
-
-# Strategy Interface
-class PaymentStrategy(ABC):
-    @abstractmethod
+# Payment Methods (Strategies)
+class CreditCard:
     def pay(self, amount):
-        pass
+        print("Paid ₹", amount, "using Credit Card")
 
-# Concrete Strategy 1
-class CreditCardPayment(PaymentStrategy):
+class DebitCard:
     def pay(self, amount):
-        print(f"Paid ₹{amount} using Credit Card.")
+        print("Paid ₹", amount, "using Debit Card")
 
-# Concrete Strategy 2
-class DebitCardPayment(PaymentStrategy):
+class UPI:
     def pay(self, amount):
-        print(f"Paid ₹{amount} using Debit Card.")
-
-# Concrete Strategy 3
-class UpiPayment(PaymentStrategy):
-    def pay(self, amount):
-        print(f"Paid ₹{amount} using UPI.")
+        print("Paid ₹", amount, "using UPI")
 
 # Context Class
 class PaymentProcessor:
-    def __init__(self, strategy=None):
-        self.strategy = strategy
+    def __init__(self, method):
+        self.method = method
 
-    def set_strategy(self, strategy):
-        self.strategy = strategy
+    def process(self, amount):
+        self.method.pay(amount)
 
-    def process_payment(self, amount):
-        if self.strategy:
-            self.strategy.pay(amount)
-        else:
-            print("No payment method selected.")
+# Main Program
+processor = PaymentProcessor(CreditCard())
+processor.process(1000)
 
-# Driver Code
-processor = PaymentProcessor()
+processor = PaymentProcessor(DebitCard())
+processor.process(2000)
 
-# Credit Card Payment
-processor.set_strategy(CreditCardPayment())
-processor.process_payment(2500)
-
-# Debit Card Payment
-processor.set_strategy(DebitCardPayment())
-processor.process_payment(1800)
-
-# UPI Payment
-processor.set_strategy(UpiPayment())
-processor.process_payment(950)
+processor = PaymentProcessor(UPI())
+processor.process(500)
